@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image";
+import './globals.css';
 import { useState, useEffect } from 'react'
 import { firestore } from '@/firebase'
 import { Box, Typography, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper } from '@mui/material'
@@ -151,12 +152,31 @@ export default function Home() {
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 4 }}>
-        <Typography variant="h2" gutterBottom>Pantry Tracker</Typography>
+    <Box sx={{
+      padding: 3,
+      position: 'relative',
+      height: '100vh', // Set the height as needed
+      overflow: 'hidden', // Ensure content does not overflow
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundImage: 'url(bg.avif)', // Path to your image
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        opacity: 0.3, // Adjust opacity as needed
+        zIndex: -1, // Ensure the pseudo-element is behind the content
+      },
+    }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 0 }}>
+        <Typography variant="h3" gutterBottom>Pantry Tracker</Typography>
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
         <TextField
           placeholder="Search Items"
           variant="outlined"
@@ -164,11 +184,11 @@ export default function Home() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{
-            width: 900,
+            width: 600,
             padding: 1,
-            borderRadius: '4px 0 0 4px',
+            borderRadius: '4px',
             backgroundColor: 'white',
-            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0px 40px 60px rgba(0, 0, 0, 0.1)',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
                 borderColor: 'rgba(0, 0, 0, 0.23)',
@@ -187,9 +207,9 @@ export default function Home() {
                 variant="contained"
                 color="primary"
                 sx={{
-                  borderRadius: '0 4px 4px 0',
+                  borderRadius: '20px',
                   boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                  height: '100%',
+                  height: '70%',
                 }}
               >
                 Search
@@ -269,12 +289,12 @@ export default function Home() {
         </DialogActions>
       </Dialog>
       <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
-        <Paper elevation={2} sx={{ padding: 2, marginBottom: 2, width: 1300, backgroundColor: '#87b983' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', marginBottom: 2 }}>
-            <Typography variant="h5">Item Name</Typography>
-            <Typography variant="h5">Days Remaining</Typography>
-            <Typography variant="h5">Count</Typography>
-            <Typography variant="h5">Actions</Typography>
+        <Paper elevation={2} sx={{ padding: 1, paddingLeft: 2, paddingRight: 2, marginBottom: 0, width: 900, backgroundColor: '#659f6f' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-around', fontWeight: '900', marginBottom: 2 }}>
+            <Typography variant="h6">Item Name</Typography>
+            <Typography variant="h6">Days Remaining to Expire</Typography>
+            <Typography variant="h6">Quantity</Typography>
+            <Typography variant="h6">Actions</Typography>
           </Box>
 
           {filteredPantry.map((item) => {
@@ -284,18 +304,18 @@ export default function Home() {
             let buttonText;
             if (daysRemaining > 7) {
               buttonColor = 'success';
-              buttonText = `${daysRemaining} days remaining`;
+              buttonText = `${daysRemaining} days`;
             } else if (daysRemaining <= 2) {
               buttonColor = 'error';
-              buttonText = daysRemaining === 0 ? 'Tomorrow' : `${daysRemaining} days remaining`;
+              buttonText = daysRemaining === 0 ? 'Tomorrow' : `${daysRemaining} days`;
             } else {
               buttonColor = 'warning';
-              buttonText = `${daysRemaining} days remaining`;
+              buttonText = `${daysRemaining} days `;
             }
 
             return (
-              <Paper key={item.name} elevation={1} sx={{ padding: 2, marginBottom: 2 }}>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Paper key={item.name} elevation={1} sx={{ padding: 1, marginBottom: 2 }}>
+                <Box display="flex" alignItems="center" justifyContent="space-around">
                   <Typography variant="h5">{item.name}</Typography>
                   <Button variant="contained" color={buttonColor} sx={{ padding: '8px 16px', minWidth: '120px' }}>
                     <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
@@ -332,7 +352,7 @@ export default function Home() {
           color="primary"
           onClick={handleOpen}
           sx={{
-            padding: '12px 24px', // Increase padding for a larger button
+            padding: '5px 10px', // Increase padding for a larger button
             fontSize: '16px',     // Increase font size
             minWidth: '150px',    // Set a minimum width
           }}
